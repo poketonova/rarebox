@@ -275,6 +275,14 @@
         <PortfolioChart :portfolios="store.portfolios" :height="300" label="All Portfolios" />
       </div>
 
+      <!-- Distribution Charts -->
+      <div class="mb-4">
+        <div class="section-header">
+          <div class="section-title">Portfolio Distribution</div>
+        </div>
+        <DistributionCharts :items="allItems" />
+      </div>
+
       <!-- Individual portfolio cards -->
       <div class="section-header">
         <div class="section-title">Portfolios</div>
@@ -336,6 +344,7 @@ import { computed, onMounted, ref } from 'vue'
 import { usePortfolioStore } from '../stores/portfolio'
 import { getCard, getJapaneseCardDetail, getMarketPrice } from '../services/pokemonApi'
 import PortfolioChart from '../components/PortfolioChart.vue'
+import DistributionCharts from '../components/DistributionCharts.vue'
 
 const store = usePortfolioStore()
 const featuresRef = ref(null)
@@ -352,6 +361,7 @@ function scrollToFeatures() {
 const totalGain = computed(() => store.totalPortfolioValue - store.totalCostBasis)
 const totalGainPct = computed(() => store.totalCostBasis > 0 ? (totalGain.value / store.totalCostBasis) * 100 : 0)
 const totalItems = computed(() => store.portfolios.reduce((s, p) => s + p.items.length, 0))
+const allItems = computed(() => store.portfolios.flatMap(p => p.items))
 
 function getPortfolioValue(portfolio) {
   return portfolio.items.reduce((s, item) => {
